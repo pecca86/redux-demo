@@ -1,8 +1,10 @@
 
-import { Form, redirect, useNavigation, useActionData } from 'react-router-dom';
+import { Form, redirect, useNavigation, useActionData, Link } from 'react-router-dom';
 import { createOrder } from '../../services/apiRestaurant';
 import Button from '../../ui/elements/Button';
 import { useState } from 'react';
+import { useSelector } from "react-redux";
+
 
 const CreateOrder = () => {
 
@@ -10,6 +12,7 @@ const CreateOrder = () => {
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
     const [priority, setPriority] = useState(false);
+    const userName = useSelector(state => state.user.userName);
 
     const fakeCart = [
         {
@@ -43,6 +46,15 @@ const CreateOrder = () => {
         return <div>Placing your order, please wait...</div>
     }
 
+    if (!userName) {
+        return (
+            <div className='m-5 flex flex-col'>
+                <p className='text-xl'>You must be registered as a user to order!</p>
+                <Link to='/' className='text-blue-500 hover:text-blue-900 mt-8'>Register as a user</Link>
+            </div>
+        )
+    }
+
     return (
         <div className='flex flex-col gap-4'>
             <h1 className='text-3xl'>Create Order</h1>
@@ -55,7 +67,7 @@ const CreateOrder = () => {
                         id="name"
                         name="customer"
                         required
-                        className='input'
+                        className='input text-center'
                         value={name}
                     />
                     {formErrors?.customer && <p className='bg-red-200 rounded-md p-1'>{formErrors.customer}</p>}
@@ -68,7 +80,7 @@ const CreateOrder = () => {
                         id="address"
                         name="address"
                         required
-                        className='input'
+                        className='input text-center'
                         value={address}
                     />
                 </div>
@@ -80,7 +92,7 @@ const CreateOrder = () => {
                         id="phone"
                         name="phone"
                         required
-                        className='input'
+                        className='input text-center'
                         value={phone}
                     />
                     {formErrors?.phone && <p className='bg-red-200 rounded-md p-1'>{formErrors.phone}</p>}
@@ -105,7 +117,7 @@ const CreateOrder = () => {
 
 const checkFormErrors = (data) => {
     const errors = {};
-    if (data.phone.length !== 10) {
+    if (data.phone.length < 10) {
         errors.phone = 'Phone number must be 10 digits long'
     }
 

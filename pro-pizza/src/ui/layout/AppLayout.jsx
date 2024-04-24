@@ -11,7 +11,7 @@ const AppLayout = () => {
         <div className="grid grid-rows-[auto_1fr_auto] h-screen">
             <Header />
             {isLoading && <Loader />}
-            <main className="m-3 overflow-scroll max-w-3xl mx-auto">
+            <main className="m-3 overflow-scroll p-3 mx-auto">
                 <Outlet />
             </main>
             <CartOverview />

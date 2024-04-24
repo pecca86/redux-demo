@@ -1,34 +1,27 @@
 import LinkButton from "../../ui/elements/LinkButton";
 import Button from "../../ui/elements/Button";
 import CartItem from "./CartItem";
-
-
-const fakeCart = [
-    {
-      pizzaId: 12,
-      name: 'Mediterranean',
-      quantity: 2,
-      unitPrice: 16,
-      totalPrice: 32,
-    },
-    {
-      pizzaId: 6,
-      name: 'Vegetale',
-      quantity: 1,
-      unitPrice: 13,
-      totalPrice: 13,
-    },
-    {
-      pizzaId: 11,
-      name: 'Spinach and Mushroom',
-      quantity: 1,
-      unitPrice: 15,
-      totalPrice: 15,
-    },
-  ];
+import { getCart, emptyCart } from "./cartSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const Cart = () => {
-    const cart = fakeCart;
+
+    const cart = useSelector(getCart);
+    const dispatch = useDispatch();
+
+    const handleEmptyCart = () => {
+        dispatch(emptyCart());
+    };
+
+    if (!cart.length) {
+        return (
+            <div>
+                <LinkButton to="/menu" navigateBack={false}>Back to menu</LinkButton>
+                <h2 className="mt-10 text-lg">Your cart is empty 🛒</h2>
+                <p className="text-md mt-5">Checkout our menu and order something now! 🍕</p>
+            </div>
+        )
+    }
 
     return (
         <div className="flex flex-col gap-7">
@@ -41,7 +34,7 @@ const Cart = () => {
             </ul>
             <div className="flex gap-5">
                 <Button type={'primary'} size={'large'}>Order</Button>
-                <Button type={'secondary'} size={'large'}>Empty cart</Button>
+                <Button onClick={e => handleEmptyCart(e)} type={'secondary'} size={'large'}>Empty cart</Button>
             </div>
         </div>
     );

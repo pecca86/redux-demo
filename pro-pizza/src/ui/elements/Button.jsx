@@ -1,6 +1,6 @@
 /* eslint react/prop-types: 0 */
 
-const Button = ({ children, type, size }) => {
+const Button = ({ children, type, size, onClick }) => {
 
     const baseStyle = {
         primary: 'bg-yellow-500 uppercase text-stone-100 inline-block tracking-wider rounded-xl hover:text-stone-800 transition-colors duration-500 focus:outline-none focus:ring focus:ring-stone-500',
@@ -16,6 +16,14 @@ const Button = ({ children, type, size }) => {
         xlarge: 'p-4 mb-1'
     };
 
+    if (onClick) {
+        return (
+            <button onClick={onClick} className={baseStyle[type] + " " + sizes[size]}>
+                {children}
+            </button>
+        );
+    }
+    
     return (
         <button className={baseStyle[type] + " " + sizes[size]}>
             {children}
