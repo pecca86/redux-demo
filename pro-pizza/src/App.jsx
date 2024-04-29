@@ -7,6 +7,7 @@ import CreateOrder, { action as createOrderAction} from "./features/order/Create
 import AppLayout from "./ui/layout/AppLayout"
 import Error from "./exceptions/Error"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { action as updatePrioAction } from "./features/order/UpdateOrder"
 
 const router = createBrowserRouter(
   [
@@ -28,7 +29,8 @@ const router = createBrowserRouter(
           path: '/order/:orderId',
           element: <Order />,
           loader: orderLoader,
-          errorElement: <Error />
+          errorElement: <Error />,
+          action: updatePrioAction
         },
         {
           path: '/order/new',

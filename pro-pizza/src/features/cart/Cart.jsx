@@ -3,14 +3,21 @@ import Button from "../../ui/elements/Button";
 import CartItem from "./CartItem";
 import { getCart, emptyCart } from "./cartSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
 
     const cart = useSelector(getCart);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleEmptyCart = () => {
         dispatch(emptyCart());
+    };
+
+    const handleOrder = (e) => {
+        e.preventDefault();
+        navigate('/order/new');
     };
 
     if (!cart.length) {
@@ -33,7 +40,7 @@ const Cart = () => {
                 {cart.map((item) => <CartItem pizza={item} key={item.pizzaId} />)}
             </ul>
             <div className="flex gap-5">
-                <Button type={'primary'} size={'large'}>Order</Button>
+                <Button onClick={e => handleOrder(e)} type={'primary'} size={'large'}>Order</Button>
                 <Button onClick={e => handleEmptyCart(e)} type={'secondary'} size={'large'}>Empty cart</Button>
             </div>
         </div>

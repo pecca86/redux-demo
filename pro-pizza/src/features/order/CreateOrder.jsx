@@ -3,8 +3,10 @@ import { Form, redirect, useNavigation, useActionData, Link } from 'react-router
 import { createOrder } from '../../services/apiRestaurant';
 import Button from '../../ui/elements/Button';
 import { useState } from 'react';
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { getCart, emptyCart } from '../cart/cartSlice';
+import { fetchAddress } from '../user/userSlice';
+import store from '../../redux/store';
 
 const CreateOrder = () => {
 
@@ -12,35 +14,26 @@ const CreateOrder = () => {
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
     const [priority, setPriority] = useState(false);
+    const [geoLoaction, setGeoLocation] = useState(null);
     const userName = useSelector(state => state.user.userName);
-
-    const fakeCart = [
-        {
-            pizzaId: 12,
-            name: "Mediterranean",
-            quantity: 2,
-            unitPrice: 16,
-            totalPrice: 32,
-        },
-        {
-            pizzaId: 6,
-            name: "Vegetale",
-            quantity: 1,
-            unitPrice: 13,
-            totalPrice: 13,
-        },
-        {
-            pizzaId: 11,
-            name: "Spinach and Mushroom",
-            quantity: 1,
-            unitPrice: 15,
-            totalPrice: 15,
-        },
-    ];
-
+    const cart = useSelector(getCart);
     const navigation = useNavigation();
     const isLoading = navigation.state === 'submitting';
     const formErrors = useActionData();
+    const dispatch = useDispatch();
+    const location = useSelector(state => state.user.address);
+    const fetchingLocation = useSelector(state => state.user.status);
+
+    const handleLocation = async (e) => {
+        e.preventDefault();
+        dispatch(fetchAddress());
+        setGeoLocation(location);
+    }
+
+    const handleAddress = (e) => {
+        setGeoLocation(null);
+        setAddress(e.target.value);
+    }
 
     if (isLoading) {
         return <div>Placing your order, please wait...</div>
@@ -51,6 +44,15 @@ const CreateOrder = () => {
             <div className='m-5 flex flex-col'>
                 <p className='text-xl'>You must be registered as a user to order!</p>
                 <Link to='/' className='text-blue-500 hover:text-blue-900 mt-8'>Register as a user</Link>
+            </div>
+        )
+    }
+
+    if (cart.length === 0) {
+        return (
+            <div className='m-5 flex flex-col'>
+                <p className='text-xl'>Your cart is empty!</p>
+                <Link to='/menu' className='text-blue-500 hover:text-blue-900 mt-8'>Go to menu</Link>
             </div>
         )
     }
@@ -74,15 +76,25 @@ const CreateOrder = () => {
                 </div>
                 <div>
                     <label htmlFor="address">Address</label>
-                    <input
-                        onChange={(e) => setAddress(e.target.value)}
-                        type="text"
-                        id="address"
-                        name="address"
-                        required
-                        className='input text-center'
-                        value={address}
-                    />
+                    <div className='flex'>
+                        <input
+                            onChange={(e) => handleAddress(e)}
+                            type="text"
+                            id="address"
+                            name="address"
+                            required
+                            className='input text-center'
+                            value={geoLoaction || address}
+                        />
+                        {
+                            !geoLoaction &&
+                            <span className='text-sm hover:rounded-full hover:border hover: border-red-300'>
+                                {fetchingLocation === 'loading' ? 'Fetching location...' :
+                                    <Button onClick={e => handleLocation(e)} size={'small'}>Use location</Button>
+                                }
+                            </span>
+                        }
+                    </div>
                 </div>
                 <div className='mb-5'>
                     <label htmlFor="phone">Phone</label>
@@ -108,7 +120,7 @@ const CreateOrder = () => {
                     />
                     <label htmlFor="priority">Give priority</label>
                 </div>
-                <input type="hidden" name='cart' value={JSON.stringify(fakeCart)} />
+                <input type="hidden" name='cart' value={JSON.stringify(cart)} />
                 <Button type={'primary'} size={'large'}>Create Order</Button>
             </Form>
         </div>
@@ -137,8 +149,8 @@ export const action = async ({ request }) => {
         priority: data.priority === 'on',
     }
 
+    store.dispatch(emptyCart());
     const errors = checkFormErrors(order);
-    console.log(errors);
 
     if (Object.keys(errors).length > 0) {
         return errors;
