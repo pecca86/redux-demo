@@ -5,11 +5,12 @@ import { getCabins, deleteCabin } from '../../services/apiCabins';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import TableRow from "./TableRow";
 import { useDeleteCabin } from './hooks/UseDeleteCabin';
+import Menus from '../../ui/Menus';
 
 
 function CabinTable() {
 
-  const { isDeleting, removeCabin } = useDeleteCabin();
+  const { isDeleting } = useDeleteCabin();
   
   const { data, isLoading, error } = useQuery(
     {
@@ -30,20 +31,18 @@ function CabinTable() {
             <th>Price</th>
             <th>Discount</th>
             <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           {data.map((cabin) => (
-            <>
+            <Menus key={cabin.id}>
               <TableRow key={cabin.id} selected={cabin}>
                   <td>{cabin.name}</td>
                   <td>{cabin.max_capacity}</td>
                   <td>{cabin.regular_price}€</td>
                   <td>{cabin.discount}€</td>
-                  <td><button onClick={() => removeCabin(cabin.id)} >Delete</button></td>
               </TableRow>
-            </>
+            </Menus>
           ))}
         </tbody>
       </table>

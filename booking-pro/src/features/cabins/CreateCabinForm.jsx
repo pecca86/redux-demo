@@ -11,8 +11,9 @@ import FormRow from "../../ui/FormRow";
 import { useForm } from "react-hook-form";
 import { createCabin } from "../../services/apiCabins";
 
-function CreateCabinForm({ selectedCabin = {} }) {
-  const {id: selectedId, ...selectedValues} = selectedCabin;
+function CreateCabinForm({ selectedCabin = {}, onClose }) {
+
+  const { id: selectedId, ...selectedValues } = selectedCabin;
   const isEditing = Boolean(selectedId);
   const { register, handleSubmit, reset, getValues, formState } = useForm(
     {
@@ -29,12 +30,13 @@ function CreateCabinForm({ selectedCabin = {} }) {
       toast.success("New cabin successfully created");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
       reset();
+      onClose?.();
     },
     onError: (err) => toast.error(err.message),
   });
 
   const { mutate: edit, isLoading: waitForEdit } = useMutation({
-    mutationFn: ({newCabinData, id})=> createCabin(newCabinData, id),
+    mutationFn: ({ newCabinData, id }) => createCabin(newCabinData, id),
     onSuccess: () => {
       toast.success("New cabin successfully created");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
@@ -44,10 +46,15 @@ function CreateCabinForm({ selectedCabin = {} }) {
   });
 
   function onSubmit(data) {
-    console.log(data);
-    const img = typeof data.image_url === "string" ? data.image_url : data.image_url[0];
+    let img;
+    if (selectedCabin) {
+      img = selectedCabin.image;
+    } else {
+      img = typeof data.image_url === "string" ? data.image_url : data.image_url[0];
+    }
+    
     if (isEditing) {
-      edit({newCabinData: {...data, image_url: img}, id: selectedId});
+      edit({ newCabinData: { ...data, image_url: img }, id: selectedId });
       return;
     }
     create({ ...data, image_url: img });
@@ -59,7 +66,7 @@ function CreateCabinForm({ selectedCabin = {} }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)} type={onClose ? 'modal' : 'regular'}>
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -132,22 +139,24 @@ function CreateCabinForm({ selectedCabin = {} }) {
         />
       </FormRow>
 
-      <FormRow label="Cabin photo">
-        <FileInput
-          id="image_url"
-          accept="image/*"
-          {...register("image_url", {
-            required: isEditing ? false : "This field is required",
-          })}
-        />
-      </FormRow>
+      {!selectedCabin &&
+        <FormRow label="Cabin photo">
+          <FileInput
+            id="image_url"
+            accept="image/*"
+            {...register("image_url", {
+              required: isEditing ? false : "This field is required",
+            })}
+          />
+        </FormRow>
+      }
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button onClick={() => onClose?.()} variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isCreating}>Add cabin</Button>
+        <Button disabled={isCreating}>{selectedCabin ? 'Update' : 'Add cabin'}</Button>
       </FormRow>
     </Form>
   );
