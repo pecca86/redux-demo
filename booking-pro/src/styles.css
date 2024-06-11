@@ -27,3 +27,13 @@ td, th{
     cursor: pointer;
     color: #007bff;
 }
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 50%;
+    width: 100%;
+    height: 100%;
+}

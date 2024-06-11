@@ -1,24 +1,21 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import {
-  HiPencil,
-  HiTrash,
-  HiEye,
-  HiArrowUpOnSquare,
-  HiArrowDownOnSquare,
-} from 'react-icons/hi2';
 
-import Tag from 'ui/Tag';
-import Menus from 'ui/Menus';
-import Modal from 'ui/Modal';
-import ConfirmDelete from 'ui/ConfirmDelete';
-import Table from 'ui/Table';
+import Tag from '../../ui/Tag';
+import Menus from '../../ui/Menus';
+import Modal from '../../ui/Modal';
+import ConfirmDelete from '../../ui/ConfirmDelete';
+import Table from '../../ui/Table';
 
-import { useDeleteBooking } from 'features/bookings/useDeleteBooking';
-import { formatCurrency } from 'utils/helpers';
-import { formatDistanceFromNow } from 'utils/helpers';
-import { useCheckout } from 'features/check-in-out/useCheckout';
+// import { useDeleteBooking } from 'features/bookings/useDeleteBooking';
+// import { formatCurrency } from 'utils/helpers';
+// import { formatDistanceFromNow } from 'utils/helpers';
+// import { useCheckout } from 'features/check-in-out/useCheckout';
 import { format, isToday } from 'date-fns';
+// const isToday = () => {};
+const formatDistanceFromNow = () => { };
+const formatCurrency = () => { };
+const isDeleting = false;
 
 // v1
 // const TableRow = styled.div`
@@ -74,8 +71,12 @@ function BookingRow({
     cabins: { name: cabinName },
   },
 }) {
-  const { mutate: deleteBooking, isLoading: isDeleting } = useDeleteBooking();
-  const { mutate: checkout, isLoading: isCheckingOut } = useCheckout();
+  // const { mutate: deleteBooking, isLoading: isDeleting } = useDeleteBooking();
+  const isDeleteing = false;
+  const deleteBooking = () => { };
+  // const { mutate: checkout, isLoading: isCheckingOut } = useCheckout();
+  const isCheckingOut = false;
+  const checkout = () => { };
 
   const navigate = useNavigate();
 
@@ -96,7 +97,7 @@ function BookingRow({
         <span>{email}</span>
       </Stacked>
 
-      <Stacked>
+      {/* <Stacked>
         <span>
           {isToday(new Date(startDate))
             ? 'Today'
@@ -107,7 +108,7 @@ function BookingRow({
           {format(new Date(startDate), 'MMM dd yyyy')} &mdash;{' '}
           {format(new Date(endDate), 'MMM dd yyyy')}
         </span>
-      </Stacked>
+      </Stacked> */}
 
       <Tag type={statusToTagName[status]}>{status.replace('-', ' ')}</Tag>
 
@@ -118,38 +119,34 @@ function BookingRow({
         <Menus.Menu>
           <Menus.Toggle id={bookingId} />
           <Menus.List id={bookingId}>
-            <Menus.Button
+            <button
               onClick={() => navigate(`/bookings/${bookingId}`)}
-              icon={<HiEye />}
             >
               See details
-            </Menus.Button>
+            </button>
 
             {status === 'unconfirmed' && (
-              <Menus.Button
+              <button
                 onClick={() => navigate(`/checkin/${bookingId}`)}
-                icon={<HiArrowDownOnSquare />}
               >
                 Check in
-              </Menus.Button>
+              </button>
             )}
 
             {status === 'checked-in' && (
-              <Menus.Button
+              <button
                 onClick={() => checkout(bookingId)}
-                disabled={isCheckingOut}
-                icon={<HiArrowUpOnSquare />}
               >
                 Check out
-              </Menus.Button>
+              </button>
             )}
 
-            <Menus.Button icon={<HiPencil />}>Edit booking</Menus.Button>
+            <button>Edit booking</button>
             {/* <Menus.Button>Delete</Menus.Button> */}
 
             {/* Now it gets a bit confusing... */}
             <Modal.Toggle opens='delete'>
-              <Menus.Button icon={<HiTrash />}>Delete booking</Menus.Button>
+              <button>Delete booking</button>
             </Modal.Toggle>
           </Menus.List>
         </Menus.Menu>

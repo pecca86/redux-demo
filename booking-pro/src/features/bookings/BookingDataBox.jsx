@@ -102,20 +102,21 @@ const Footer = styled.footer`
 `;
 
 function BookingDataBox({ booking }) {
+  console.log('BookingDataBox', booking);
   const {
     created_at,
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    cabinPrice,
-    extrasPrice,
-    totalPrice,
-    hasBreakfast,
+    start_date,
+    end_date,
+    number_of_nights,
+    number_of_guests,
+    cabin_price,
+    extra_price,
+    total_price,
+    breakfast,
     observations,
-    isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
-    cabins: { name: cabinName },
+    paid,
+    guests: { fullName: full_name, email, nationality, flag, national_id },
+    cabins: { name: cabin_name },
   } = booking;
 
   return (
@@ -124,29 +125,29 @@ function BookingDataBox({ booking }) {
         <div>
           <HiOutlineHomeModern />
           <p>
-            {numNights} nights in Cabin <span>{cabinName}</span>
+            {number_of_nights} nights in Cabin <span>{cabin_name}</span>
           </p>
         </div>
 
         <p>
-          {format(new Date(startDate), 'EEE, MMM dd yyyy')} (
-          {isToday(new Date(startDate))
+          {format(new Date(start_date), 'EEE, MMM dd yyyy')} (
+          {isToday(new Date(end_date))
             ? 'Today'
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), 'EEE, MMM dd yyyy')}
+            : formatDistanceFromNow(start_date)}
+          ) &mdash; {format(new Date(end_date), 'EEE, MMM dd yyyy')}
         </p>
       </Header>
 
       <Section>
         <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
+          {flag && <Flag src={flag} alt={`Flag of ${nationality}`} />}
           <p>
-            {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ''}
+            {full_name} {number_of_guests > 1 ? `+ ${number_of_guests - 1} guests` : ''}
           </p>
           <span>&bull;</span>
           <p>{email}</p>
           <span>&bull;</span>
-          <p>National ID {nationalID}</p>
+          <p>National ID {national_id}</p>
         </Guest>
 
         {observations && (
@@ -159,20 +160,20 @@ function BookingDataBox({ booking }) {
         )}
 
         <DataItem icon={<HiOutlineCheckCircle />} label='Breakfast included?'>
-          {hasBreakfast ? 'Yes' : 'No'}
+          {breakfast ? 'Yes' : 'No'}
         </DataItem>
 
-        <Price isPaid={isPaid}>
+        <Price isPaid={paid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
-            {formatCurrency(totalPrice)}
+            {formatCurrency(total_price)}
 
-            {hasBreakfast &&
-              ` (${formatCurrency(cabinPrice)} cabin + ${formatCurrency(
+            {breakfast &&
+              ` (${formatCurrency(cabin_price)} cabin + ${formatCurrency(
                 extrasPrice
               )} breakfast)`}
           </DataItem>
 
-          <p>{isPaid ? 'Paid' : 'Will pay at property'}</p>
+          <p>{paid ? 'Paid' : 'Will pay at property'}</p>
         </Price>
       </Section>
 

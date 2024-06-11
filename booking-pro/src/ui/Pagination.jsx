@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledPagination = styled.div`
@@ -55,3 +56,45 @@ const PaginationButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+const Pagination = ({ count }) => {
+  const newCount = 20;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = !searchParams.get('page') ? 1 : Number(searchParams.get('page'));
+
+  const pageCount = Math.ceil(newCount / 10);
+
+  const nextPage = () => {
+    const next = currentPage === pageCount ? pageCount : currentPage + 1;
+    searchParams.set('page', next);
+    setSearchParams(searchParams);
+  }
+
+  const prevPage = () => {
+    const prev = currentPage === 1 ? 1 : currentPage - 1;
+    searchParams.set('page', prev);
+    setSearchParams(searchParams);
+  }
+
+  return (
+    <StyledPagination>
+      <p>Showing <span>{(currentPage - 1) * 10 + 1 }</span> to <span>{currentPage === pageCount ? count : currentPage * 10}</span> of <span>{newCount}</span></p>
+      <Buttons>
+        <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Previous
+        </PaginationButton>
+        <PaginationButton onClick={nextPage} disabled={currentPage === pageCount}>
+            Next
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </PaginationButton>
+      </Buttons>
+    </StyledPagination>
+  )
+}
+
+export default Pagination;

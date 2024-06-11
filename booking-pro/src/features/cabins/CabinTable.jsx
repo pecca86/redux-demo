@@ -34,6 +34,7 @@ function CabinTable() {
     filteredData = data;
   }
 
+
   // SORTING
   const sortValue = searchParams.get('sort') || 'name-asc';
   filteredData.sort((a, b) => {
