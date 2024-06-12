@@ -1,4 +1,3 @@
-import { useDarkMode } from 'context/DarkModeContext';
 import { eachDayOfInterval, format, isSameDay, subDays } from 'date-fns';
 import {
   Area,
@@ -10,7 +9,7 @@ import {
   YAxis,
 } from 'recharts';
 import styled from 'styled-components';
-import Heading from 'ui/Heading';
+import Heading from '../../ui/Heading';
 import DashboardBox from './DashboardBox';
 
 const StyledSalesChart = styled(DashboardBox)`
@@ -25,7 +24,6 @@ const StyledSalesChart = styled(DashboardBox)`
 
 function SalesChart({ bookings, numDays }) {
   // In the chart we need to set colors, but we can't do it based on CSS variables, because we have no access to them here. So let's set them manually
-  const { isDarkMode } = useDarkMode();
 
   const allDates = eachDayOfInterval({
     start: subDays(new Date(), numDays - 1),
@@ -37,26 +35,19 @@ function SalesChart({ bookings, numDays }) {
       label: format(date, 'MMM dd'),
       totalSales: bookings
         .filter((booking) => isSameDay(date, new Date(booking.created_at)))
-        .reduce((acc, cur) => acc + cur.totalPrice, 0),
+        .reduce((acc, cur) => acc + cur.total_price, 0),
       extrasSales: bookings
         .filter((booking) => isSameDay(date, new Date(booking.created_at)))
-        .reduce((acc, cur) => acc + cur.extrasPrice, 0),
+        .reduce((acc, cur) => acc + cur.extra_price, 0),
     };
   });
 
-  const colors = isDarkMode
-    ? {
-        totalSales: { stroke: '#4f46e5', fill: '#4f46e5' },
-        extrasSales: { stroke: '#22c55e', fill: '#22c55e' },
-        text: '#e5e7eb',
-        background: '#18212f',
-      }
-    : {
-        totalSales: { stroke: '#4f46e5', fill: '#c7d2fe' },
-        extrasSales: { stroke: '#16a34a', fill: '#dcfce7' },
-        text: '#374151',
-        background: '#fff',
-      };
+  const colors = {
+    totalSales: { stroke: '#4f46e5', fill: '#c7d2fe' },
+    extrasSales: { stroke: '#16a34a', fill: '#dcfce7' },
+    text: '#374151',
+    background: '#fff',
+  };
 
   return (
     <StyledSalesChart>
