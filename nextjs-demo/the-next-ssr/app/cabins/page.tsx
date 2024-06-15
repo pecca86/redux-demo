@@ -1,21 +1,14 @@
 import CabinCard from "@/app/_components/CabinCard";
+import { getCabins } from "../_lib/data-service";
 
 export const metadata = {
     title: "Cabins",
 };
 
-type Cabin = {
-    id: number;
-    name: string;
-    maxCapacity: number;
-    regularPrice: number;
-    discount: number;
-    image: string;
-};
 
-export default function Page(): JSX.Element {
-    // CHANGE
-    const cabins: Cabin[] = [];
+export default async function Page(): Promise<JSX.Element> {
+    const cabins: Cabin[] = await getCabins();
+    console.log(cabins);
 
     return (
         <div>
