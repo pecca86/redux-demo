@@ -140,7 +140,7 @@ export async function getSettings() {
   return data;
 }
 
-export async function getCountries() {
+export async function getCountries(): Promise<Country[]> {
   try {
     const res = await fetch(
       'https://restcountries.com/v2/all?fields=name,flag'

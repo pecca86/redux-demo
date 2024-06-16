@@ -31,3 +31,8 @@ type Booking = {
         image_url: string;
     };
 };
+
+type Country = {
+    name: string;
+    flag: string;
+};
