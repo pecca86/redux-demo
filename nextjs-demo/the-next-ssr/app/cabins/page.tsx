@@ -2,12 +2,15 @@ import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import Spinner from "../_components/Spinner";
 
+// Different caching strategies can be used for different parts of the application.
+// export const revalidate = 0; // Revalidate the page every 0 seconds == does not cache the page. [ 1 ]
+//export const revalidate = 3600; // Revalidate the page every 3600 seconds. [ 2 ]
+
 export const metadata = {
     title: "Cabins",
 };
 
-
-export default async function Page(): Promise<JSX.Element> {
+export default function Page(): JSX.Element {
 
     return (
         <div>

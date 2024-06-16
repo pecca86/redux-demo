@@ -1,8 +1,11 @@
 import React from 'react';
 import CabinCard from "@/app/_components/CabinCard";
+import { unstable_noStore as noStore } from 'next/cache';
 import { getCabins } from "../_lib/data-service";
 
 const CabinList = async () => {
+    noStore(); // prevent caching of this component, this will be the way to go with Partial Pre-rendering
+
     const cabins: Cabin[] = await getCabins();
 
     if (cabins.length <= 0) { return null; }

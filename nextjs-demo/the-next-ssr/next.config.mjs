@@ -9,7 +9,8 @@ const nextConfig = {
                 pathname: '/storage/v1/object/public/cabin_images/**',
             }
         ]
-    }
+    },
+    // output: "export" <== static site,
 };
 
 export default nextConfig;

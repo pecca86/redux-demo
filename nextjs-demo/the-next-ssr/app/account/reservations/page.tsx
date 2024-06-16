@@ -4,14 +4,6 @@ export const metadata = {
     title: "Reservations",
 };
 
-type Booking = {
-    id: number;
-    cabin: string;
-    checkIn: string;
-    checkOut: string;
-    guests: number;
-    total: number;
-};
 
 export default function Page(): JSX.Element {
     // CHANGE
