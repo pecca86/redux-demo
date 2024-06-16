@@ -5,6 +5,7 @@ type Cabin = {
     regular_price: number;
     discount: number;
     image_url: string;
+    description: string;
 };
 
 type Country = {
@@ -17,6 +18,9 @@ interface LayoutProps {
 }
 
 type Booking = {
+    status: string;
+    paid: boolean;
+    observations: string;
     id: number;
     guest_id: number;
     start_date: string;
@@ -26,13 +30,21 @@ type Booking = {
     number_of_guests: number;
     status: string;
     created_at: string;
-    cabins: {
-        name: string;
-        image_url: string;
-    };
+    breakfast: boolean;
+    cabin_price: number;
+    extra_price: number;
+    cabin_id: number;
+    total_price: number;
 };
 
 type Country = {
     name: string;
     flag: string;
+};
+
+type Settings = {
+    min_booking_len: number;
+    max_booking_len: number;
+    max_guests_per_cabin: number;
+    breakfast_price: number;
 };

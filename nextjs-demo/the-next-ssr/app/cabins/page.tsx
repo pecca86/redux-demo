@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import Spinner from "../_components/Spinner";
 import Filter from "../_components/Filter";
+import ReservationReminder from "../_components/ReservationReminder";
 
 // Different caching strategies can be used for different parts of the application.
 // export const revalidate = 0; // Revalidate the page every 0 seconds == does not cache the page. [ 1 ]
@@ -38,6 +39,7 @@ export default function Page({ searchParams }: PageProps): JSX.Element {
             {/* the key tells the suspense when it should be triggered again */}
             <Suspense fallback={<Spinner />} key={filter}> 
                 <CabinList filter={filter} />
+                <ReservationReminder />
             </Suspense>
         </div>
     );

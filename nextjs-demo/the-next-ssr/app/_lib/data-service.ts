@@ -99,7 +99,7 @@ export async function getBookings(guest_id: string | number) {
   return data;
 }
 
-export async function getBookedDatesBycabin_id(cabin_id: string | number) {
+export async function getBookedDatesByCabinId(cabin_id: string | number) {
   let today: Date = new Date();
   today.setUTCHours(0, 0, 0, 0);
   const today_str: string = today.toISOString();
@@ -129,7 +129,7 @@ export async function getBookedDatesBycabin_id(cabin_id: string | number) {
   return bookedDates;
 }
 
-export async function getSettings() {
+export async function getSettings(): Promise<Settings> {
   const { data, error } = await supabase.from('settings').select('*').single();
 
   if (error) {
