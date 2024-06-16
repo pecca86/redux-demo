@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import Spinner from "../_components/Spinner";
+import Filter from "../_components/Filter";
 
 // Different caching strategies can be used for different parts of the application.
 // export const revalidate = 0; // Revalidate the page every 0 seconds == does not cache the page. [ 1 ]
@@ -10,7 +11,13 @@ export const metadata = {
     title: "Cabins",
 };
 
-export default function Page(): JSX.Element {
+type PageProps = {
+    searchParams: { [key: string]: string }
+};
+
+export default function Page({ searchParams }: PageProps): JSX.Element {
+
+    const filter = searchParams?.capacity ?? "all";
 
     return (
         <div>
@@ -25,9 +32,12 @@ export default function Page(): JSX.Element {
                 home away from home. The perfect spot for a peaceful, calm vacation.
                 Welcome to paradise.
             </p>
-
-            <Suspense fallback={<Spinner />}>
-                <CabinList />
+            <div className="flex justify-end mb-8">
+                <Filter />
+            </div>
+            {/* the key tells the suspense when it should be triggered again */}
+            <Suspense fallback={<Spinner />} key={filter}> 
+                <CabinList filter={filter} />
             </Suspense>
         </div>
     );
