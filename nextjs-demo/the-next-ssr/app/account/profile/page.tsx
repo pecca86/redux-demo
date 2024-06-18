@@ -7,10 +7,7 @@ export const metadata = {
 
 export default function Page(): JSX.Element {
   // CHANGE
-  const countryFlag = "🇫🇮";
   const nationality = "portugal";
-
-
   return (
     <div>
       <h2 className="font-semibold text-2xl text-accent-400 mb-4">
