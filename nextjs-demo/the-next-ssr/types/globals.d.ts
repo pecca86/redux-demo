@@ -5,7 +5,7 @@ type Cabin = {
     regular_price: number;
     discount: number;
     image_url: string;
-    description: string;
+    description?: string;
 };
 
 type Country = {
@@ -35,6 +35,10 @@ type Booking = {
     extra_price: number;
     cabin_id: number;
     total_price: number;
+    cabins: {
+        name: string;
+        image_url: string;
+    };
 };
 
 type Country = {
@@ -48,3 +52,15 @@ type Settings = {
     max_guests_per_cabin: number;
     breakfast_price: number;
 };
+
+type User = {
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+}
+
+type UserData = {
+    user: User;
+    expires: string;
+}

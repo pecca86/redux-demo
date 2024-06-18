@@ -1,0 +1,4 @@
+//api/auth/[...nextauth] means that all requests to /api/auth/* will be handled by this route
+// by exporing GET and POST from the auth lib, we can use them in this route, now we have the handlers for the routes: 
+// api/auth/signin, api/auth/signout, /api/auth/providers, /api/auth/csrf, /api/auth/session, /api/auth/signin/email, /api/auth/signin/credentials, /api/auth/signin/oauth, /api/auth/signout, /api/auth/signout/callback, /api/auth/signout/complete, /api/auth/signout/oauth, /api/auth/signout/providers, /api/auth/signout/callback, /api/auth/signout/complete, /api/auth/signout/oaut
+export { GET, POST } from "@/app/_lib/auth";

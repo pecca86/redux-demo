@@ -15,7 +15,8 @@ import { useReservation } from "@/app/_components/ReservationContext";
 //     );
 // }
 
-function DateSelector({ settings, cabin, bookedDates }: { settings: Settings; cabin: Cabin; bookedDates: Date[] }) {
+// function DateSelector({ settings, cabin, bookedDates }: { settings: Settings; cabin: Cabin; bookedDates: Date[] }) {
+function DateSelector({ settings }: { settings: Settings }) {
     const { range, setRange, resetRange } = useReservation();
 
     // CHANGE
