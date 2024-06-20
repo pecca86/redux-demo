@@ -55,7 +55,11 @@ export const getCabins = async function (): Promise<Cabin[]> {
 };
 
 // Guests are uniquely identified by their email address
-export async function getGuest(email: string) {
+export async function getGuest(email: string | null | undefined) {
+  if (!email) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from('guests')
     .select('*')

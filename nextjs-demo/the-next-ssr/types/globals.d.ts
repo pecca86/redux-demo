@@ -55,9 +55,14 @@ type Settings = {
 
 type User = {
     id?: string;
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
+    name?: string | null | undefined;
+    email?: string | null | undefined;
+    image?: string | null | undefined;
+    full_name?: string | null | undefined;
+    nationality?: string | null | undefined;
+    flag?: string | null | undefined;
+    national_id?: string | null | undefined;
+    guestId?: number | null | undefined;
 }
 
 type UserData = {
