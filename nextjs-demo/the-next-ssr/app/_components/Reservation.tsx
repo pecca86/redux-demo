@@ -6,15 +6,12 @@ import { auth } from '../_lib/auth';
 import LoginMessage from './LoginMessage';
 
 const Reservation = async ({ cabin }: { cabin: Cabin }) => {
-    // const settings: Settings = await getSettings();
-    // const bookedDates = await getBookedDatesByCabinId(cabin.id);
     const [settings, bookedDates] = await Promise.all([
         getSettings(),
         getBookedDatesByCabinId(cabin.id)
     ]);
 
     const session = await auth();
-
 
     return (
         <div className="grid grid-cols-2 border border-primary-800 min-h-[400px]">
